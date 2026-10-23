@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ac-sala",
+    "name": "Ar-condicionado",
+    "room": "Sala",
+    "category": "Climatização",
+    "watts": 1200,
+    "hoursPerDay": 6,
+    "active": true,
+    "expectedWatts": 1100
+  },
+  {
+    "id": "fridge",
+    "name": "Geladeira",
+    "room": "Cozinha",
+    "category": "Cozinha",
+    "watts": 180,
+    "hoursPerDay": 24,
+    "active": true,
+    "expectedWatts": 220
+  },
+  {
+    "id": "shower",
+    "name": "Chuveiro elétrico",
+    "room": "Banheiro",
+    "category": "Aquecimento",
+    "watts": 5500,
+    "hoursPerDay": 0.7,
+    "active": true,
+    "expectedWatts": 5500
+  },
+  {
+    "id": "tv",
+    "name": "Smart TV",
+    "room": "Sala",
+    "category": "Eletrônicos",
+    "watts": 110,
+    "hoursPerDay": 5,
+    "active": true,
+    "expectedWatts": 150
+  },
+  {
+    "id": "laptop",
+    "name": "Notebook",
+    "room": "Quarto",
+    "category": "Eletrônicos",
+    "watts": 65,
+    "hoursPerDay": 7,
+    "active": true,
+    "expectedWatts": 90
+  },
+  {
+    "id": "lights",
+    "name": "Iluminação LED",
+    "room": "Área externa",
+    "category": "Iluminação",
+    "watts": 90,
+    "hoursPerDay": 5,
+    "active": true,
+    "expectedWatts": 100
+  },
+  {
+    "id": "washer",
+    "name": "Máquina de lavar",
+    "room": "Área de serviço",
+    "category": "Lavanderia",
+    "watts": 600,
+    "hoursPerDay": 0.8,
+    "active": true,
+    "expectedWatts": 700
+  }
+]

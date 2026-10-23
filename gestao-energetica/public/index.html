@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2b">
+  <meta name="description" content="Dashboard demonstrativo de gestão energética residencial.">
+  <title>Energia Smart — Gestão residencial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/themes.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Energia Smart página inicial">
+        <span class="brand-mark"><i data-lucide="zap"></i></span>
+        <span><strong>energia<span>smart</span></strong><small>HOME INTELLIGENCE</small></span>
+      </a>
+      <div class="side-label">VISÃO GERAL</div>
+      <nav class="nav-menu" aria-label="Navegação principal">
+        <a class="nav-link active" href="#overview"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a class="nav-link" href="#rooms"><i data-lucide="house"></i> Ambientes</a>
+        <a class="nav-link" href="#equipment"><i data-lucide="plug-zap"></i> Equipamentos</a>
+        <a class="nav-link" href="#insights"><i data-lucide="lightbulb"></i> Insights e economia</a>
+        <a class="nav-link" href="#alerts"><i data-lucide="bell"></i> Alertas <span class="nav-count" id="alertCount">0</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="eco-card">
+          <div class="eco-icon"><i data-lucide="leaf"></i></div>
+          <strong>Pequenas mudanças.<br>Grande impacto.</strong>
+          <p>Monitore hábitos e descubra onde economizar.</p>
+          <a href="#insights">Ver dicas <i data-lucide="arrow-up-right"></i></a>
+        </div>
+        <div class="profile">
+          <div class="avatar">ES</div><div><strong>Minha residência</strong><small>Plano demonstrativo</small></div>
+          <button class="icon-button" id="themeToggle" aria-label="Alternar tema"><i data-lucide="moon"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menuToggle" aria-label="Abrir menu"><i data-lucide="menu"></i></button>
+        <div class="breadcrumb"><span>Residência</span><i data-lucide="chevron-right"></i><strong>Dashboard</strong></div>
+        <div class="topbar-right">
+          <span class="live-status"><span class="live-dot"></span><span id="connectionLabel">Conectando sensores</span></span>
+          <button class="icon-button notification-button" id="alertsShortcut" aria-label="Ver alertas"><i data-lucide="bell"></i><span class="notification-dot"></span></button>
+          <div class="date-chip"><i data-lucide="calendar-days"></i><span id="todayLabel">Hoje</span></div>
+        </div>
+      </header>
+
+      <section class="page-heading" id="overview">
+        <div>
+          <p class="eyebrow">QUARTA-FEIRA · CASA CONECTADA</p>
+          <h1>Bom dia, <span>bem-vindo de volta.</span></h1>
+          <p class="subheading">Aqui está o panorama energético da sua casa.</p>
+        </div>
+        <div class="heading-actions">
+          <button class="button button-secondary" id="exportCsv"><i data-lucide="file-spreadsheet"></i> Exportar CSV</button>
+          <button class="button button-primary" id="exportJson"><i data-lucide="download"></i> Relatório JSON</button>
+        </div>
+      </section>
+
+      <section class="metric-grid" aria-label="Indicadores principais">
+        <article class="metric-card featured">
+          <div class="metric-top"><span>Consumo instantâneo</span><span class="metric-icon"><i data-lucide="activity"></i></span></div>
+          <div class="metric-value"><strong id="currentPower">--</strong><span>kW</span></div>
+          <div class="metric-foot"><span class="live-dot"></span><span>Atualização em tempo real</span><span class="metric-live" id="lastUpdate">aguardando...</span></div>
+          <div class="sparkline"><canvas id="sparkChart" aria-label="Variação recente da potência"></canvas></div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Consumo hoje</span><span class="metric-icon mint"><i data-lucide="sun"></i></span></div>
+          <div class="metric-value"><strong id="todayKwh">--</strong><span>kWh</span></div>
+          <div class="metric-foot"><span class="trend neutral" id="todayTrend">Simulação ativa</span></div>
+          <div class="metric-bottom-line"><span style="width:56%"></span></div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Estimativa mensal</span><span class="metric-icon amber"><i data-lucide="wallet"></i></span></div>
+          <div class="metric-value"><strong id="monthCost">--</strong></div>
+          <div class="metric-foot"><span class="trend" id="monthComparison">Calculando comparação</span></div>
+          <div class="metric-bottom-line amber-line"><span style="width:68%"></span></div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Meta mensal</span><span class="metric-icon blue"><i data-lucide="target"></i></span></div>
+          <div class="metric-value"><strong id="monthKwh">--</strong><span>kWh</span></div>
+          <div class="metric-foot"><span id="goalStatus">Meta configurável</span><button class="text-button" id="openSettings">Editar meta</button></div>
+          <div class="progress-track"><span id="goalProgress"></span></div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel chart-panel">
+          <div class="panel-heading">
+            <div><h2>Consumo de energia</h2><p>Acompanhe o comportamento ao longo do tempo</p></div>
+            <div class="segmented" role="group" aria-label="Período do gráfico">
+              <button class="period-button active" data-period="24h">24h</button><button class="period-button" data-period="7d">7 dias</button><button class="period-button" data-period="30d">30 dias</button>
+            </div>
+          </div>
+          <div class="chart-legend"><span><i class="legend-dot"></i> Consumo (kWh estimado)</span><span class="legend-muted">Dados simulados</span></div>
+          <div class="line-chart-wrap"><canvas id="consumptionChart" aria-label="Gráfico temporal de consumo"></canvas></div>
+        </article>
+        <article class="panel distribution-panel">
+          <div class="panel-heading"><div><h2>Onde se consome mais</h2><p>Distribuição por ambiente</p></div><button class="more-button" aria-label="Mais opções"><i data-lucide="ellipsis"></i></button></div>
+          <div class="donut-wrap"><canvas id="roomChart" aria-label="Gráfico de consumo por ambiente"></canvas><div class="donut-center"><strong id="donutTotal">--</strong><span>kWh estimados</span></div></div>
+          <div class="room-legend" id="roomLegend"></div>
+        </article>
+      </section>
+
+      <section class="content-grid lower-grid">
+        <article class="panel" id="rooms">
+          <div class="panel-heading"><div><h2>Consumo por ambiente</h2><p>Ranking estimado de consumo diário</p></div><a class="panel-link" href="#equipment">Ver equipamentos <i data-lucide="arrow-up-right"></i></a></div>
+          <div id="roomRanking" class="ranking-list"><div class="loading-line"></div><div class="loading-line"></div><div class="loading-line"></div></div>
+        </article>
+        <article class="panel" id="alerts">
+          <div class="panel-heading"><div><h2>Central de alertas</h2><p>Eventos que merecem sua atenção</p></div><span class="small-pill" id="alertPill">Monitorando</span></div>
+          <div id="alertList" class="alert-list"><div class="empty-state">Conectando ao monitoramento...</div></div>
+        </article>
+      </section>
+
+      <section class="panel equipment-panel" id="equipment">
+        <div class="panel-heading"><div><h2>Equipamentos monitorados</h2><p>Estimativa baseada na potência e no uso informado</p></div><span class="device-count" id="deviceCount">0 dispositivos</span></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Equipamento</th><th>Ambiente</th><th>Potência atual</th><th>Consumo diário estimado</th><th>Status</th><th>Análise</th></tr></thead><tbody id="deviceTable"><tr><td colspan="6">Carregando equipamentos...</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <section class="content-grid insight-grid" id="insights">
+        <article class="panel savings-panel">
+          <div class="insight-icon"><i data-lucide="leaf"></i></div>
+          <div class="insight-copy"><span class="eyebrow">SIMULADOR DE ECONOMIA</span><h2>Economize sem perder conforto.</h2><p>Reduza o uso do ar-condicionado e veja o impacto estimado no orçamento mensal.</p>
+            <div class="range-row"><label for="hoursRange">Redução diária de uso</label><strong><span id="hoursValue">1</span> hora(s)</strong></div>
+            <input id="hoursRange" type="range" min="1" max="6" value="1" step="1">
+            <div class="range-labels"><span>1 hora</span><span>6 horas</span></div>
+          </div>
+          <div class="savings-result"><span>Economia potencial / mês</span><strong id="savingsValue">R$ --</strong><small>Estimativa, não garantia de economia real</small></div>
+        </article>
+        <article class="panel tips-panel">
+          <div class="panel-heading"><div><h2>Insights para sua casa</h2><p>Ações simples, impacto contínuo</p></div><span class="insight-badge"><i data-lucide="sparkles"></i> Dicas</span></div>
+          <div class="tip-item"><span class="tip-icon yellow"><i data-lucide="snowflake"></i></span><div><strong>Climatização eficiente</strong><p>Configure o ar-condicionado entre 23°C e 24°C e mantenha filtros limpos.</p></div></div>
+          <div class="tip-item"><span class="tip-icon green"><i data-lucide="lightbulb"></i></span><div><strong>Iluminação inteligente</strong><p>Priorize lâmpadas LED e aproveite a luz natural sempre que possível.</p></div></div>
+          <div class="tip-item"><span class="tip-icon blue"><i data-lucide="plug"></i></span><div><strong>Evite desperdício em espera</strong><p>Desligue equipamentos que não precisam permanecer em standby.</p></div></div>
+          <p class="source-note">Referências gerais de eficiência. Não é uma comparação oficial com dados da ANEEL.</p>
+        </article>
+      </section>
+
+      <footer class="footer"><span>© 2026 Energia Smart · Projeto demonstrativo</span><span><span class="live-dot"></span> Simulador IoT ativo · Leituras fictícias</span></footer>
+    </main>
+  </div>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" id="settingsForm">
+      <div class="dialog-heading"><div><span class="eyebrow">PERSONALIZE SEU PAINEL</span><h2>Configurações de energia</h2></div><button class="icon-button" value="cancel" aria-label="Fechar"><i data-lucide="x"></i></button></div>
+      <label for="tariffInput">Tarifa de energia (R$/kWh)</label><input id="tariffInput" type="number" min="0.01" max="10" step="0.01" required>
+      <label for="goalInput">Meta mensal de consumo (kWh)</label><input id="goalInput" type="number" min="10" max="100000" step="10" required>
+      <p class="form-help">Os valores são salvos neste navegador. Use sua tarifa real como referência, se desejar.</p>
+      <div class="dialog-actions"><button class="button button-secondary" value="cancel">Cancelar</button><button class="button button-primary" id="saveSettings" value="default">Salvar configurações</button></div>
+    </form>
+  </dialog>
+  <div id="toastRegion" class="toast-region" role="status" aria-live="polite"></div>
+  <script src="/js/utils.js"></script>
+  <script src="/js/simulator.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/analytics.js"></script>
+  <script src="/js/alerts.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* Tokens de tema: altere aqui para personalizar toda a interface. */
+:root {
+  color-scheme: light;
+  --bg: #f4f7f8;
+  --surface: #ffffff;
+  --surface-soft: #f8fafb;
+  --text: #152336;
+  --text-muted: #7a8796;
+  --border: #e8edf0;
+  --green: #0fa878;
+  --green-dark: #087c5a;
+  --green-soft: #e5f8f0;
+  --yellow: #f3bd46;
+  --blue: #3d8bdf;
+  --red: #df5a64;
+  --shadow: 0 10px 30px rgba(28, 49, 66, .045);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101923;
+  --surface: #182431;
+  --surface-soft: #1d2b39;
+  --text: #e8eff5;
+  --text-muted: #98a8b7;
+  --border: #2a3948;
+  --green: #40d7a0;
+  --green-dark: #27b984;
+  --green-soft: #193b35;
+  --yellow: #f2c65f;
+  --blue: #65aaf1;
+  --red: #ff7b85;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .12);
+}
